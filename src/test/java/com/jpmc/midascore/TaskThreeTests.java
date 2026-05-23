@@ -1,5 +1,6 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.component.DatabaseConduit;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,9 @@ public class TaskThreeTests {
     @Autowired
     private FileLoader fileLoader;
 
+    // @Autowired
+    //private DatabaseConduit databaseConduit;
+
     @Test
     void task_three_verifier() throws InterruptedException {
         userPopulator.populate();
@@ -32,6 +36,7 @@ public class TaskThreeTests {
         }
         Thread.sleep(2000);
 
+       // float waldorfBalance = databaseConduit.findUser(5L).getBalance();
 
         logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");
