@@ -9,15 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class TransactionProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionProcessor.class);
     private final DatabaseConduit databaseConduit;
+    private final IncentiveApiClient incentiveApiClient;
 
-    public TransactionProcessor(DatabaseConduit databaseConduit) {
+    public TransactionProcessor(DatabaseConduit databaseConduit,
+            IncentiveApiClient incentiveApiClient) {
         this.databaseConduit = databaseConduit;
+        this.incentiveApiClient = incentiveApiClient;
     }
 
     @Transactional
@@ -33,17 +35,25 @@ public class TransactionProcessor {
             return;
         }
 
+        // Call incentive API AFTER validation
+        float incentiveAmount = incentiveApiClient.getIncentive(transaction);
+
         sender.setBalance(sender.getBalance() - transaction.getAmount());
-        recipient.setBalance(recipient.getBalance() + transaction.getAmount());
+        recipient.setBalance(recipient.getBalance() 
+           + transaction.getAmount()
+           + incentiveAmount
+        );
 
         // sender.getId() == 5L || recipient.getId() == 5L
         // if (sender.getId() == 5L || recipient.getId() == 5L) {
-        //     logger.info("Transaction processed: {} sender: {} recipient: {} amount: {}", transaction, sender, recipient, transaction.getAmount());
+        // logger.info("Transaction processed: {} sender: {} recipient: {} amount: {}",
+        // transaction, sender, recipient, transaction.getAmount());
         // }
 
         databaseConduit.save(sender);
         databaseConduit.save(recipient);
 
-        databaseConduit.save(new TransactionRecord(sender, recipient, transaction.getAmount()));
+        databaseConduit.save(new TransactionRecord(
+            sender, recipient, transaction.getAmount(), incentiveAmount));
     }
 }

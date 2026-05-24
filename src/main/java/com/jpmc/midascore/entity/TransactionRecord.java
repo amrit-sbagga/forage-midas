@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class TransactionRecord {
-    
+
     @Id
     @GeneratedValue
     private Long id;
@@ -17,21 +17,28 @@ public class TransactionRecord {
     @ManyToOne(optional = false)
     @JoinColumn(name = "sender_id")
     private UserRecord sender;
-   
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "recipient_id")
     private UserRecord recipient;
-   
+
     @Column(nullable = false)
     private float amount;
+
+    @Column(nullable = false)
+    private float incentive;
 
     protected TransactionRecord() {
     }
 
-    public TransactionRecord(UserRecord sender, UserRecord recipient, float amount) {
+    public TransactionRecord(UserRecord sender,
+            UserRecord recipient,
+            float amount,
+            float incentive) {
         this.sender = sender;
         this.recipient = recipient;
         this.amount = amount;
+        this.incentive = incentive;
     }
 
     public Long getId() {
@@ -64,5 +71,13 @@ public class TransactionRecord {
 
     public void setAmount(float amount) {
         this.amount = amount;
+    }
+
+    public float getIncentive() {
+        return incentive;
+    }
+
+    public void setIncentive(float incentive) {
+        this.incentive = incentive;
     }
 }
