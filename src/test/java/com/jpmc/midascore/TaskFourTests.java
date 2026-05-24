@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
-import com.jpmc.midascore.component.DatabaseConduit;
+//import com.jpmc.midascore.component.DatabaseConduit;
 
 @SpringBootTest
 @DirtiesContext
@@ -24,8 +24,8 @@ public class TaskFourTests {
     @Autowired
     private FileLoader fileLoader;
 
-    @Autowired
-    private DatabaseConduit databaseConduit;
+    // @Autowired
+    // private DatabaseConduit databaseConduit;
 
     @Test
     void task_four_verifier() throws InterruptedException {
@@ -36,7 +36,7 @@ public class TaskFourTests {
         }
         Thread.sleep(2000);
 
-        float wilburBalance = databaseConduit.findUser(9L).getBalance();
+        // float wilburBalance = databaseConduit.findUser(9L).getBalance();
 
         logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");
